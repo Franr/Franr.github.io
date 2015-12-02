@@ -8,6 +8,7 @@
         <script type="text/javascript">
             function run() {
                 Crafty.init(640, 400);
+                Crafty.audio.play("noise", -1);
 
                 var cambiar = 0;
                 var cambiar_limite = 3;
@@ -25,8 +26,6 @@
                       size: '20px',
                     })
                     .text("I don't feel very well<br>today...");
-
-                Crafty.audio.play("noise", -1);
 
                 var player1 = Crafty.e("2D, Canvas")
                     .bind('EnterFrame', function() {
