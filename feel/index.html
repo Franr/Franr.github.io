@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <script src="crafty-min.js" type="text/javascript"></script>
+        <link href='http://fonts.googleapis.com/css?family=VT323' rel='stylesheet' type='text/css'>
+    </head>
+    <body>
+        <script type="text/javascript">
+            function run() {
+                Crafty.init(640, 400);
+
+                var cambiar = 0;
+                var cambiar_limite = 3;
+                var centro_x = 100;
+                var centro_y = 100;
+
+                function rand_x() { return centro_x + Math.floor((Math.random()*66)+50); }
+                function rand_y() { return centro_y + Math.floor((Math.random()*66)+50); }
+
+                Crafty.e("2D, DOM, Text")
+                    .attr({ x: 230, y: 160, w: 200 })
+                    .textFont({
+                      type: 'italic',
+                      family: 'VT323',
+                      size: '20px',
+                    })
+                    .text("I don't feel very well<br>today...");
+
+                Crafty.audio.play("noise", -1);
+
+                var player1 = Crafty.e("2D, Canvas")
+                    .bind('EnterFrame', function() {
+
+                        var ctx = Crafty.canvasLayer._canvas.getContext('2d');
+
+                        xmin = rand_x();
+                        ymin = rand_y();
+
+                        ctx.lineWidth = 0.25;
+
+                        if (cambiar < cambiar_limite) {
+                            cambiar += 1;
+                        } else {
+                            cambiar = 0;
+                            ctx.clearRect(0, 0, Crafty.viewport.width, Crafty.viewport.height);
+                            ctx.beginPath();
+                            ctx.drawImage(cuerpo,156,205);
+                            for ( var i=0; i < 60; i++ ) {
+
+                                ctx.moveTo(xmin,ymin);
+
+                                xmax = rand_x();
+                                ymax = rand_y();
+
+                                ctx.lineTo(xmax,ymax);
+                                ctx.stroke();
+
+                                xmin = xmax;
+                                ymin = ymax;
+                            }
+                            ctx.closePath();
+                        }
+
+                });
+            }
+
+            Crafty.load(
+              {
+                "audio": {"noise": "noise.ogg"},
+              },
+              function() {
+                cuerpo = new Image();
+                cuerpo.src = "cuerpo.png";
+                run();
+              }
+            );
+        </script>
+    </body>
+</html>
